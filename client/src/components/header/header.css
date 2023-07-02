@@ -1,15 +1,45 @@
 .header {
   background-color: #003580;
+  /* #003580; */
   color: white;
   display: flex;
   justify-content: center;
+  /* text-align: center; */
   position: relative;
+  padding: 0 2%;
+  /* overflow-x: scroll; */
+  /* border: #000 solid 3px; */
 }
 
 .headerContainer {
   width: 100%;
   max-width: 1024px;
-  margin: 20px 0px 100px 0px;
+  margin: 20px 0;
+  /* border: #000000 solid 3px; */
+  
+}
+
+@media screen and (max-width:400px){
+  .header{
+    max-width: 400px;
+  }  
+
+  .headerTitle{
+    font-size: 25px;
+  }
+
+  .headerContainer{
+    overflow-x: scroll;
+  }
+
+  .headerSearch .headerSearchItem{
+    display:none;
+    
+    /* visibility: hidden; */
+  }
+  .headerList{
+    overflow-x: scroll;
+  }
 }
 
 .headerContainer.listMode {
@@ -20,6 +50,8 @@
   display: flex;
   gap: 40px;
   margin-bottom: 50px;
+  /* border: #000 solid 3px; */
+  /* overflow-x: scroll; */
 }
 
 .headerListItem {
@@ -50,16 +82,18 @@
 .headerSearch {
   height: 30px;
   background-color: white;
-  border: 3px solid #febb02;
+  border: 3px solid #003580;
   display: flex;
   align-items: center;
   justify-content: space-around;
   padding: 10px 0px;
   border-radius: 5px;
-  position: absolute;
-  bottom: -25px;
+  margin: 5px 0;
+  /* position: absolute;
+  bottom: 0px; */
   width: 100%;
-  max-width: 1024px;
+  /* max-width: 1024px; */
+  /* overflow-x: scroll; */
 }
 
 .headerIcon {

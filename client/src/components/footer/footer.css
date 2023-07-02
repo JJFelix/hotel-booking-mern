@@ -1,7 +1,14 @@
 .footer{
-  width: 100%;
-  width: 1024px;
+  min-width: 100%;
+  /* width: 1024px; */
   font-size: 12px;
+  /* text-align: center; */
+  height: 40vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* background-color: #003580; */
+  color: #000000;
 }
 
 .fLists{

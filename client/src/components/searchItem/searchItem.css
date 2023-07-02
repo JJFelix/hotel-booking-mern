@@ -8,6 +8,21 @@
   margin-bottom: 20px;
 }
 
+@media screen and (max-width:400px) {
+  .searchItem{
+    display: flex;
+    flex-direction: column;
+    /* justify-content: center; */
+    align-items: center;
+    text-align: justify;
+    border: #000 solid 1px;
+  }  
+
+  .siImg{
+    width: 100%;
+  }
+}
+
 .siImg {
   width: 200px;
   height: 200px;
