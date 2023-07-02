@@ -11,6 +11,30 @@
   gap: 20px;
 }
 
+@media screen and (max-width:400px) {
+  .listContainer{
+    /* border: #000 solid 2px; */
+    margin-bottom: 10px;
+    padding: 1%;
+    overflow-x: scroll;
+  }  
+  .listWrapper{
+    display: flex;
+    flex-direction: column;
+  }
+
+  .listSearch{
+    min-height: 200px;
+    overflow-y: scroll;
+  }
+
+  .listResult{
+    display: flex;
+    flex-direction: column;
+    /* border: #000 solid 2px; */
+  }
+}
+
 .listSearch {
   flex: 1;
   background-color: #febb02;
