@@ -5,11 +5,12 @@ export const getAllHotels = async(req,res, next)=>{
     // const failed = true
     
     // if(failed) return next(createError(401, "You are not authenticated"))
-
+    const {min, max,...others} = req.query
     try {
-        const hotels = await Hotel.find()
-        console.log(hotels)
-        res.status(200).json(hotels)
+        const hotelsByManyParams = await Hotel.find({...others, cheapestPrice:{$gt:min,$lt:max}})
+        const hotelsBySingleParam = await Hotel.find(req.query)
+        // console.log(hotels)
+        res.status(200).json({hotelsByManyParams, hotelsBySingleParam})
     } catch (err) {
         // console.error(next(err))
         // res.status(500).json(err)   
@@ -78,7 +79,7 @@ export const countByCity = async(req,res, next)=>{
         const list = await Promise.all(cities.map(city=>{
             return (Hotel.countDocuments({city:city}))
         }))
-        console.log(list)
+        // console.log(list)
         res.status(200).json(list)
     } catch (err) {
         // console.error(next(err))
