@@ -1,23 +1,25 @@
 import "./list.css";
 import Navbar from "../../components/navbar/Navbar";
 import Header from "../../components/header/Header";
-import { useLocation } from "react-router-dom";
-import { useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
+import { useContext, useEffect, useState } from "react";
 import { format } from "date-fns";
 import { DateRange } from "react-date-range";
 import SearchItem from "../../components/searchItem/SearchItem";
 import useFetch from '../../hooks/useFetch'
-
-
+import { SearchContext } from "../../context/SearchContext";
 
 const List = () => {
   const location = useLocation();
+  const navigate = useNavigate()
   const [destination, setDestination] = useState(location.state.destination);
-  const [date, setDate] = useState(location.state.date);
+  const [dates, setDates] = useState(location.state.dates);
   const [openDate, setOpenDate] = useState(false);
   const [options, setOptions] = useState(location.state.options);
   const [min, setMin] = useState(undefined);
   const [max, setMax] = useState(undefined);
+
+  const {dispatch} = useContext(SearchContext)
 
   const {dataByManyParams, loading, error, reFetch} = useFetch(
     `/hotels?city=${destination}&min=${min || 0}&max=${max || 999}`
@@ -25,7 +27,21 @@ const List = () => {
 
   const handleClick = ()=>{
     reFetch()
+    dispatch({
+      type:"NEW SEARCH", 
+      payload:{destination, dates, options}, 
+      state: { destination, dates, options },
+    },
+    navigate("/hotels", { state: { destination, dates, options } }),
+  )
   }
+
+  useEffect(()=>{
+    localStorage.setItem('dates', JSON.stringify(dates))
+    localStorage.setItem('options', JSON.stringify(options))
+  })
+
+  console.log(location.state);
 
   return (
     <div>
@@ -42,14 +58,14 @@ const List = () => {
             <div className="lsItem">
               <label>Check-in Date</label>
               <span onClick={() => setOpenDate(!openDate)}>{`${format(
-                date[0].startDate,
+                dates[0].startDate,
                 "MM/dd/yyyy"
-              )} to ${format(date[0].endDate, "MM/dd/yyyy")}`}</span>
+              )} to ${format(dates[0].endDate, "MM/dd/yyyy")}`}</span>
               {openDate && (
                 <DateRange
-                  onChange={(item) => setDate([item.selection])}
+                  onChange={(item) => setDates([item.selection])}
                   minDate={new Date()}
-                  ranges={date}
+                  ranges={dates}
                 />
               )}
             </div>

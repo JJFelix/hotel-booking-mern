@@ -10,19 +10,24 @@ import {
   faCircleXmark,
   faLocationDot,
 } from "@fortawesome/free-solid-svg-icons";
-import { Fragment, useState } from "react";
-import { useLoaderData, useLocation } from "react-router-dom";
+import { Fragment, useContext, useEffect, useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 import useFetch from '../../hooks/useFetch'
+import { SearchContext } from "../../context/SearchContext.js";
+import { AuthContext } from "../../context/AuthContext";
+import Reserve from "../../components/reserve/Reserve";
 
 const Hotel = () => {
+  const navigate = useNavigate()
   const location = useLocation()
-  // console.log(location)
+  // console.log("Location.state:",location)
   const id = location.pathname.split("/")[2]
   const [slideNumber, setSlideNumber] = useState(0);
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(false); //slider modal
+  const [openModal, setOpenModal] = useState(false)
 
   const {data, loading, error} = useFetch(`/hotels/${id}`)
-  console.log(data)
+  // console.log(data)
 
   const photos = [
     {
@@ -45,6 +50,22 @@ const Hotel = () => {
     },
   ];
 
+  const {user} = useContext(AuthContext)
+
+  const { dates, options } = useContext(SearchContext)
+
+  // console.log("Date:",dates)
+
+  const MILLISECONDS_PER_DAY = 1000 * 60 * 60 * 24;
+
+  function dayDifference(date1, date2){
+    const timeDiff = Math.abs(date2.getTime() - date1.getTime())
+    const diffDays = Math.ceil(timeDiff / MILLISECONDS_PER_DAY)
+    return diffDays
+  }
+
+  const days = dayDifference(dates[0].endDate, dates[0].startDate)
+
   const handleOpen = (i) => {
     setSlideNumber(i);
     setOpen(true);
@@ -61,6 +82,14 @@ const Hotel = () => {
 
     setSlideNumber(newSlideNumber)
   };
+
+  const handleClick = ()=>{
+    if (user){
+      setOpenModal(true)
+    }else{
+      navigate('/login')
+    }
+  }
 
   return (
     <div>
@@ -81,7 +110,7 @@ const Hotel = () => {
                 onClick={() => handleMove("l")}
               />
               <div className="sliderWrapper">
-                <img src={photos[slideNumber].src} alt="" className="sliderImg" />
+                <img src={data.photos[slideNumber]} alt="" className="sliderImg" />
               </div>
               <FontAwesomeIcon
                 icon={faCircleArrowRight}
@@ -103,9 +132,9 @@ const Hotel = () => {
             <span className="hotelPriceHighlight">
               Book a stay over ${data.cheapestPrice} at this property and get a free airport taxi
             </span>
-            <button className="bookNow">Reserve or Book Now!</button>
+            <button onClick={handleClick} className="bookNow">Reserve or Book Now!</button>
             <div className="hotelImages">
-              {photos.map((photo, i) => (
+              {photos.map((photo, i) => ( //data.photos?
                 <div className="hotelImgWrapper" key={i}>
                   <img
                     onClick={() => handleOpen(i)}
@@ -124,21 +153,27 @@ const Hotel = () => {
                 </p>
               </div>
               <div className="hotelDetailsPrice">
-                <h1>Perfect for a 9-night stay!</h1>
+                <h1>Perfect for a {days}-night stay!</h1>
                 <span>
                   Located in the heart of <Fragment>{data.city}</Fragment>, this property has an
                   excellent location score of 9.8!{data.rating}
                 </span>
                 <h2>
-                  <b>$945</b> (9 nights)
+                  <b>${days * data.cheapestPrice * options.room}</b> ({days} nights)
                 </h2>
-                <button>Reserve or Book Now!</button>
+                  <button onClick={handleClick}>Reserve or Book Now!</button>
               </div>
             </div>
           </div>
-          <MailList />
+          <MailList /><br />
           <Footer />
         </div>
+      )}
+      {openModal && (
+        <Reserve 
+          setOpen={setOpenModal}
+          hotelId={id}
+        />
       )}
     </div>
   );

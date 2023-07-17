@@ -1,5 +1,6 @@
 .homeContainer{
   margin-top: 0;
+  margin-bottom: 2em;
   display: flex;
   flex-direction: column;
   align-items: center;
