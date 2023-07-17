@@ -13,7 +13,7 @@ const useFetch = (url)=>{
         setLoading(true)
         try {
             const res = await axios.get(url)
-            console.log("API response:",res.data)
+            // console.log("API response:",res.data)
             setData(res.data)
             setDataByManyParams(res.data.hotelsByManyParams);
             setDataBySingleParam(res.data.hotelsBySingleParam);
