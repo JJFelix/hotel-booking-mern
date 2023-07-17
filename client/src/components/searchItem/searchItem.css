@@ -15,11 +15,12 @@
     /* justify-content: center; */
     align-items: center;
     text-align: justify;
-    border: #000 solid 1px;
+    /* border: #000 solid 1px; */
   }  
 
   .siImg{
-    width: 100%;
+    width: 100px;
+    object-fit: cover;
   }
 }
 

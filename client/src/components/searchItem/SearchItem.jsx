@@ -6,7 +6,7 @@ const SearchItem = ({item}) => {
     <div className="searchItem">
       <img
         // src={item.photos[0]}
-        src="https://picsum.photos/200"
+        src="https://picsum.photos/400/300"
         alt=""
         className="siImg"
       />
